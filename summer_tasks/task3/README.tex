@@ -188,13 +188,19 @@ On top of this, motor drivers for all the motors except the servos (which don't 
 \node [font=\small] at (13,7.25) {Servo};
 \node [font=\small] at (10.6,9.5) {BLDC};
 \node [font=\small] at (12.1,9.5) {BLDC};
+
+\draw  (13,9.75) rectangle (14.55,9); % Stepper
+\node [font=\small] at (13.75,9.5) {Stepper};
+\draw (13.75,9) to[short] (13.75,8.25);
+\draw (13.75,8.25) to[short] (8.75,8.25);
+
 \node [font=\normalsize] at (10.5,11.75) {DC};
 \node [font=\normalsize] at (11.75,11.75) {DC};
 \node [font=\normalsize] at (13,11.75) {DC};
 \node [font=\normalsize] at (14.25,11.75) {DC};
 \draw (8.75,11.5) to[short] (10,11.5);
 \draw (8.75,9.25) to[short] (10,9.25);
-\draw (12,9) to[short] (12,8.5);
+\draw (12,9) to[short] (12,8.5); % --
 \draw (12,8.5) to[short] (8.75,8.5);
 \draw (8.75,12.5) to[short] (11.75,12.5);
 \draw (11.75,12.5) to[short] (11.75,12);
@@ -331,6 +337,12 @@ Since we're using a 12 V battery, it will blow up our Raspberry Pi and ESP32 ins
 \draw (5.75,9.75) to[short] (5.75,6);
 \draw (5.75,6) to[short] (13,6);
 \draw (13,6.75) to[short] (13,6);
+
+\draw  (13,9.75) rectangle (14.55,9); % Stepper
+\node [font=\small] at (13.75,9.5) {Stepper};
+\draw (13.75,9) to[short] (13.75,8.25);
+\draw (13.75,8.25) to[short] (8.75,8.25);
+
 \node [font=\small] at (10.5,7.25) {Servo};
 \node [font=\small] at (11.75,7.25) {Servo};
 \node [font=\small] at (13,7.25) {Servo};
@@ -403,7 +415,17 @@ Since we're using a 12 V battery, it will blow up our Raspberry Pi and ESP32 ins
 \FloatBarrier
 
 \subsection*{Power Distribution and Component Selection}
-
+What are the extra components we need?
+\begin{enumerate}
+    \item Motor Drivers for 4$\times$ DC Motors and 2$\times$ BLDC Motors
+    \item Variable Buck Converters (2$\times$)
+    \item Battery
+    \item BMS Chip
+    \item Current Sensor
+    \item Fuse
+    \item Schottky Diode
+    \item Master switch
+\end{enumerate}
 
 \begin{figure}[!ht]
 \centering
