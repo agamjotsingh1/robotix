@@ -1,0 +1,140 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{geometry}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usepackage{longtable}
+\usepackage{circuitikz}
+\usepackage{comment}
+\usepackage{MnSymbol}
+\usepackage{physics}
+\usepackage{booktabs}
+\usepackage[section]{placeins}
+
+
+\title{}
+\author{EE24BTECH11002 Agamjot Singh\\IIT Hyderabad}
+\date{\today}
+
+\begin{document}
+%\maketitle
+
+\section*{Task 3 - Power Management System}
+Okay first things first, what do we have to build?\\
+It's basically just a robotic arm that can move around.
+
+\subsection*{What do we have?}
+Let's see what we're working with.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Components} & \textbf{Quantity} \\
+\midrule
+Brushed DC Geared Motors & 4 \\
+BLDC Motors & 2 \\
+Servo Motors & 3 \\
+NEMA Stepper Motor & 1 \\
+Raspberry Pi 5 & 1 \\
+RPI Camera Module 3 & 1 \\
+Ldrobot D500 LiDAR Kit & 1 \\
+ESP32 & 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{Our objective}
+\begin{itemize}
+\item Schematic - Basically what goes where
+\item Appropriate Battery Selection
+\item Safety Features (including a kill switch of course)
+\item Power Distribution Analysis 
+\end{itemize}
+
+\newpage
+
+\subsection*{Schematic - What goes where}
+\subsubsection*{Motor Specifications}
+We first focusing on the Torque specifications of all the motors to figure what motors to use in locomotion vs the robotic arm itself.
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Components} & \textbf{Quantity} & \textbf{Rated Torque} \\
+\midrule
+Brushed DC Motors & 4 & 11 kg-cm \\
+BLDC Motors & 2 & 0.573 kg-cm \\
+Servo Motors & 3 & 28.8 to 35 kg-cm \\
+NEMA Stepper Motor (2 Phase) & 1 & 2.9 kg-cm \\
+\bottomrule
+\end{tabular}
+\end{table}
+\FloatBarrier
+
+Calculating that rated torque for the ECO II Series 2207 BLDC Motor was not that straightforward.
+
+The torque of a BLDC motor can be calculated using the formula,
+\begin{equation*}
+\text{Torque} = K_t \times \text{Current}
+\end{equation*}
+
+where $K_t$ is the torque constant, which is related to the kV rating.
+
+First, we convert the kV rating from RPM/Volt to the SI unit rad/s/Volt,
+
+\begin{align*}
+K_v(\text{SI}) &= 1700 \times \frac{2\pi}{60} \text{ rad/s/V} \\
+K_v(\text{SI}) &= 177.89 \text{ rad/s/V}
+\end{align*}
+
+The torque constant $K_t$ is the reciprocal of $K_v$ in SI units,
+
+\begin{align*}
+K_t = \frac{1}{K_v(\text{SI})} &= \frac{1}{177.89} = 0.00562 \text{ Nm/A}\\
+\text{Rated Torque} &= K_t \times \text{Rated Current} \\
+\text{Rated Torque} &= 0.00562 \text{ Nm/A} \times 10 \text{ A} \\
+\text{Rated Torque} &= 0.0562 \text{ Nm} = 0.0562 \text{ kg-cm}
+\end{align*}
+
+\subsubsection*{Motor Selection}
+\textbf{Locomotion:} An obvious choice for the locomotion would be the 4 Brushed DC Geared Motors which provide enough torque for the load movement and is pretty suitable in a 4-wheel drive configuration.
+\newline
+If we were to choose some other motor, say the servo motor because of its much higher torque, then we would have to make a tricycle drive which is certainly not suitable for high loads and stability.
+
+\textbf{Base joint actuator:} The base motor has to overcome the frictional force and in addition, has to handle the angular acceleration of the whole robotic arm.
+\begin{align}
+    \tau_{\text{base}} = \tau_{\text{friction}} + I\alpha
+\end{align}
+where $I$ is the moment of inertia and $\alpha$ is the angular acceleration at that instant about the axis.
+\newline
+Assuming we'll keep $\alpha$ minimal and proper lubrication of the motors (avoiding $\tau_{\text{friction}}$), the torque required is quite minimal. On the other hand the precision required is massive which can only be provided by the NEMA Stepper motor. Lesser torque but the precision, boosted by software microstepping, is more suited to the base motor.
+
+\textbf{Shoulder joint actuator:} Here we define some terminologies. Let the Load mass be $m$, link lengths be $L_1, L_2, L_3$, link masses be $M_1, M_2, M_3$, end effector mass be $M_0$ (including the motors for the end effector). This will be clearer to the reader by the figure below. The actuators themselves are marked as $A_1, A_2, A_3$ and $A_0$ as the end effector.
+\newline
+Coming back to the shoulder joint actuator $A_1$, 
+
+\subsection*{Power ig?}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llll}
+\toprule
+\textbf{Components} & \textbf{Quantity} & \textbf{Rated Voltage} & \textbf{Stall Current} \\
+\midrule
+Brushed DC Motors & 4 & 12 V & 15 A \\
+BLDC Motors & 2 & 11.1 to 22.2 V & 36 A \\
+Servo Motors & 3 & 4 to 8.4 V & 3.8 A \\
+NEMA Stepper Motor (2 Phase) & 1 & 12 V & 0.5 A $\times$ 2 = 1 A \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
