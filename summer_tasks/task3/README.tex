@@ -231,8 +231,67 @@ On top of this, motor drivers for all the motors except the servos (which don't 
 }%
 
 \label{fig:my_label}
+\caption{Overview Schematic}
 \end{figure}
 \FloatBarrier
+
+\subsection*{Battery Pack}
+The battery pack consists not merely the battery but the safety and protection systems in place to avoid, well, catastrophes. In place is a \textbf{BMS} (Battery management system), \textbf{Fuse} to avoid short circuits, \textbf{Fool's diode} to prevent reverse current, and a \textbf{Master Kill Switch} for turning off the whole bot. The battery pack schematic is given below.
+
+\begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\small]
+\draw  (3.75,11) rectangle (6.25,9.75);
+\draw (5,12.5) to[short] (5,11);
+\draw (5,9.75) to[short] (5,8.25);
+\draw (5,12.5) to[short] (9.75,12.5);
+\draw (9.75,12.5) to[normal open switch] (11.75,12.5);
+\node at (10.5,12.5) [circ] {};
+\node at (11,12.5) [circ] {};
+\node at (11.75,12.5) [circ] {};
+\node at (9.75,12.5) [circ] {};
+\draw  (7.5,11) rectangle (10,9.75);
+\draw (5,11.75) to[short] (7.75,11.75);
+\draw (7.75,11.75) to[short] (7.75,11);
+\draw (5,9) to[short] (7.75,9);
+\draw (7.75,9.75) to[short] (7.75,9);
+\draw (9.75,11.75) to[L ] (11.75,11.75);
+\draw (9.75,11.75) to[short] (9.75,11);
+\draw (11.75,11.75) to[short] (11.75,10.25);
+\draw (11.75,10.25) to[short] (10,10.25);
+\draw (8.25,9.75) to[short] (8.25,8.25);
+\draw  (8.75,8.75) rectangle (11.25,7.75);
+\draw (5,8.25) to[short] (8.75,8.25);
+\draw (11.25,8.25) to[short] (17.25,8.25);
+\draw (11.75,12.5) to[short] (13.25,12.5);
+\draw (9,9.75) to[short] (9,9.25);
+\draw (9,9.25) to[short] (12,9.25);
+\draw (12,9.25) to[short] (12,8.25);
+\draw  (13.25,12.75) rectangle (15,12);
+\draw (15,12.5) to[short] (17.25,12.5);
+\draw (16,8.25) to[empty Schottky diode] (16,12.5);
+\draw (5,8.25) to (5,7.75) node[ground]{};
+\draw [->, >=Stealth, dashed] (8.75,11) -- (8.75,14.25);
+\node [font=\small] at (5.25,11.25) {+};
+\node [font=\small] at (5.25,9.5) {-};
+\node [font=\small] at (17.5,12.5) {+};
+\node [font=\small] at (17.5,8.25) {-};
+\node [font=\normalsize] at (5,10.4) {Battery};
+\node [font=\normalsize] at (8.75,10.35) {BMS};
+\node [font=\normalsize] at (14.1,12.4) {Fuse};
+\node [font=\small] at (10,8.5) {Current};
+\node [font=\small] at (10,8.15) {Sensor};
+\draw [ dashed] (3.5,13.25) rectangle  (17,7);
+\node [font=\normalsize] at (5,13.5) {Battery pack};
+\end{circuitikz}
+}%
+
+\label{fig:my_label}
+\end{figure}
+\FloatBarrier
+
 
 \subsection*{Power ig?}
 
