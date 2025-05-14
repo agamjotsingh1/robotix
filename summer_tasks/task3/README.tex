@@ -534,10 +534,20 @@ We're going to be using the 12V 200A Car Start Relay which costs about 1493 rupe
 \href{https://order2india.com/products/12v-200a-car-start-relay-with-accessories?variant=43710190583930&utm_source=google&utm_medium=organic&utm_campaign=ALL&utm_content=12V\%20200A\%20Car\%20Start\%20Relay\%20with\%20Accessories&gad_source=1&gad_campaignid=21058867647&gbraid=0AAAAADjpDzQd_h_QiVlT-siNAMC-BX8IV&gclid=CjwKCAjw_pDBBhBMEiwAmY02NoSwFztjR-UFZ8ERJ-SUvc4wo6-MO1Tyu-ZFE0xYVFXtt13ZgQBkBhoCj_MQAvD_BwE}{Link for the component can be found here.}
 
 \subsubsection*{BMS}
-The BMS for our current specifications, 3S LiPo with atleast 150 A of max discharge is EXTREMELY hard to find. Hate to say it, but I had to set up a proxy server to access AliExpress. I found a 3S 150A Battery Protection Board Balance MOS High Current BMS. 
+The BMS for our current specifications, 3S LiPo with atleast 150 A of max discharge was EXTREMELY hard to find. Hate to say it, but I had to set up a proxy server to access AliExpress. I found a 3S 150A Battery Protection Board Balance MOS High Current BMS. 
 This costs about 1557 rupees.
 
+Usually BMS barely take in any current, so because of lack of proper datasheets for this BMS, we're gonna assume it takes in negligible amount of current and hence consumes pretty less power (relatively).
+
 \href{https://www.aliexpress.com/item/1005003684963240.html}{Link for the component can be found here.}
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=0.75\textwidth]{bms.jpeg}
+    \end{center}
+    \caption{Data supplied by the vendor}\label{fig:}
+\end{figure}
+\FloatBarrier
 
 
 \begin{figure}[!ht]
