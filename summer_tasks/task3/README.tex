@@ -3,7 +3,6 @@
 \usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{float}
-\usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{geometry}
@@ -17,6 +16,7 @@
 \usepackage{physics}
 \usepackage{booktabs}
 \usepackage[section]{placeins}
+\usepackage[colorlinks=true, urlcolor=blue, linkcolor=red]{hyperref}
 
 \providecommand{\brak}[1]{\ensuremath{\left(#1\right)}}
 
@@ -427,6 +427,119 @@ What are the extra components we need?
     \item Master switch
 \end{enumerate}
 
+Okay firstly, we have to calculate the rough power consumption estimate.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Component} & \textbf{Quantity} & \textbf{Rated Voltage (V)} & \textbf{Stall Current (A)} \\
+\hline
+DC Geared Motor (IG45) & 4 & 12.0 & 15.0 \\
+\hline
+BLDC (ECO II 2207) & 2 & 11.1-22.2 & 36.0 \\
+\hline
+NEMA Stepper (39HY38-0504) & 1 & 12.0 & 0.5 $\times$ 2 = 1 \\
+\hline
+Servo Motor (OT5330M) & 3 & 4.0-8.4 & 3.8 \\
+\hline
+Raspberry Pi 5 & 1 & 5.0 & 2.2 \\
+\hline
+Raspberry Pi Camera Module 3 & 1 & 5.0 & 0.25 \\
+\hline
+Ldrobot D500 LiDAR Kit & 1 & 5.0 & 0.29 \\
+\hline
+ESP32 & 1 & 5.0 & 0.3 \\
+\hline
+\end{tabular}
+    \caption{Component Specifications}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Component} & \textbf{Quantity} & \textbf{Operating Voltage (V)} & \textbf{Stall Power (W)} \\
+\hline
+DC Geared Motor (IG45) & 4 & 11.1 & 166.5 \\
+\hline
+BLDC (ECO II 2207) & 2 & 11.1 & 399.6 \\
+\hline
+NEMA Stepper (39HY38-0504) & 1 & 11.1 & 11.1 \\
+\hline
+Servo Motor (OT5330M) & 3 & 7.4 & 28.1 \\
+\hline
+Raspberry Pi 5 & 1 & 5.0 & 11.0 \\
+\hline
+Raspberry Pi Camera Module 3 & 1 & 5.0 & 1.25 \\
+\hline
+Ldrobot D500 LiDAR Kit & 1 & 5.0 & 1.45 \\
+\hline
+ESP32 & 1 & 5.0 & 1.5 \\
+\hline
+\end{tabular}
+\caption{Power Requirements}
+\end{table}
+
+\begin{align*}
+\text{DC Geared Motors (4x)} &= 4 \times 11.1\text{ V} \times 15.0\text{ A} = 666.0\text{ W} \\
+\text{BLDC Motors (2x)} &= 2 \times 11.1\text{ V} \times 36.0\text{ A} = 799.2\text{ W} \\
+\text{NEMA Stepper Motor (1x)} &= 1 \times 11.1\text{ V} \times 1\text{ A} = 11.1\text{ W} \\
+\text{Servo Motors (3x)} &= 3 \times 4.0\text{ V} \times 3.8\text{ A} = 45.6\text{ W} \\
+\text{Raspberry Pi 5} &= 5.0\text{ V} \times 2.2\text{ A} = 11.0\text{ W} \\
+\text{Raspberry Pi Camera Module 3} &= 5.0\text{ V} \times 0.25\text{ A} = 1.25\text{ W} \\
+\text{Ldrobot D500 LiDAR Kit} &= 5.0\text{ V} \times 0.29\text{ A} = 1.45\text{ W} \\
+\text{ESP32} &= 5.0\text{ V} \times 0.3\text{ A} = 1.5\text{ W} \\
+\textbf{Total Power} &= 1537.1\text{ W}
+\end{align*}
+
+That's a HUGE amount of power. Also you may notice that we have been taking 11.1 V as the operating voltage when the rated voltage was 12 V. That's because a 3s LiPo Battery has a nominal voltage of 11.1 V and peak voltage of 12.6 V, and these are the batteries we'll be using in this bot.
+\newline
+This rough power estimation has not taken into account the power consumed by motor drivers, the BMS, etc. has not been considered. Although they will be extremely less compared to the massive 1537 W of power.
+\begin{align*}
+    \textbf{Rough Current Drawn} = 1537.1/11.1 = 138.47\text{ A}
+\end{align*}
+Now this will affect all the materials we choose henceforth.
+
+\subsubsection*{Battery}
+The battery we're going for is a Pro-Range 11.1V 5200mAh 40C 3S Lithium Polymer Battery Pack. 
+\newline
+This pack has a three cell series combination which results in 11.1 V of voltage and a capacity of 5200mAh along with 40 C as the C rating.
+\begin{align*}
+    \text{Max continous discharge current} &= \text{(capacity)}\times\text{(C rating)}\\
+    &= 5200 \times 40 = 208000\text{ mA}\\
+    &= 208\text{ A}
+\end{align*}
+
+So this has an headroom of about 70 A which is MORE than enough. The cost of this battery is about 3653 rupees.
+
+\href{https://robu.in/product/pro-range-5200mah-3s-40c80c-lithium-polymer-battery-pack-lipo/}{Link for the component can be found here.}
+
+
+\subsubsection*{Fuse}
+The fuse we selected is LittelFuse Auto 200A 58VDC Fuse. This also has a headroom of about 60 A above the max discharge current. This costs about 377 rupees.
+
+\href{https://www.digikey.in/en/products/detail/littelfuse-inc/142.5631.6202/2515909?gad_source=1&gad_campaignid=20498599563&gbraid=0AAAAADrbLljJD7EDQKu9e9nLQij0boGQ3&gclid=CjwKCAjw_pDBBhBMEiwAmY02NlW6MqK-9fe1ue4tsHIFhOGmYJwIuewU8G1YjnB5rM2lacEHPa4Z9hoCnioQAvD_BwE&gclsrc=aw.ds}{Link for the component can be found here.}
+
+\subsubsection*{Schottky Diode}
+We're going for an extremely cheap but useful SS34 Schottky Diode. This costs about 25 rupees.
+
+\href{https://robu.in/product/ss34-schottky-diode-for-high-speed-switching-pack-of-2/?gad_source=1&gad_campaignid=17427802703&gbraid=0AAAAADvLFWebM7-G2QsFY7UCdjSACyQJK&gclid=CjwKCAjw_pDBBhBMEiwAmY02Ng7v65L4U7x7HYcmHqhfgriCHJnP5DWrVZJornA1QMzXB2dP9AnKdRoC5OUQAvD_BwE}{Link for the component can be found here.}
+
+\subsubsection*{Master/Kill Switch}
+This switch will be in the form of a relay, because it also has to be controlled by the BMS systems. We need a relay that can handle atleast 12V DC at 150 A. Unfortunately these types of relays are pretty hard to find, and are on the expensive side.
+\newline
+We're going to be using the 12V 200A Car Start Relay which costs about 1493 rupees.
+
+\href{https://order2india.com/products/12v-200a-car-start-relay-with-accessories?variant=43710190583930&utm_source=google&utm_medium=organic&utm_campaign=ALL&utm_content=12V\%20200A\%20Car\%20Start\%20Relay\%20with\%20Accessories&gad_source=1&gad_campaignid=21058867647&gbraid=0AAAAADjpDzQd_h_QiVlT-siNAMC-BX8IV&gclid=CjwKCAjw_pDBBhBMEiwAmY02NoSwFztjR-UFZ8ERJ-SUvc4wo6-MO1Tyu-ZFE0xYVFXtt13ZgQBkBhoCj_MQAvD_BwE}{Link for the component can be found here.}
+
+\subsubsection*{BMS}
+The BMS for our current specifications, 3S LiPo with atleast 150 A of max discharge is EXTREMELY hard to find. Hate to say it, but I had to set up a proxy server to access AliExpress. I found a 3S 150A Battery Protection Board Balance MOS High Current BMS. 
+This costs about 1557 rupees.
+
+\href{https://www.aliexpress.com/item/1005003684963240.html}{Link for the component can be found here.}
+
+
 \begin{figure}[!ht]
 \centering
 \resizebox{1\textwidth}{!}{%
@@ -532,10 +645,16 @@ What are the extra components we need?
 \node [font=\small] at (3,10) {5 V};
 \node [font=\small, rotate around={-90:(0,0)}] at (14,12.5) {11.1V};
 \node [font=\small, rotate around={-90:(0,0)}] at (14.5,12.5) {15 A};
-\node [font=\small] at (10.5,8.25) {11.1 V};
-\node [font=\small] at (10.25,8.75) {36 A};
+\node [font=\small] at (11.5,8.75) {11.1V};
+\node [font=\small] at (10.5,8.75) {36A};
 \node [font=\small] at (13.5,7.75) {7.4 V};
 \node [font=\small] at (12.5,7.75) {3.8 A};
+\draw  (13,9.75) rectangle (14.75,9);
+\node [font=\small] at (13.75,9.5) {Stepper};
+\draw (8.75,8.25) to[short] (13.75,8.25);
+\draw (13.75,8.25) to[short] (13.75,9);
+\node [font=\small] at (14.25,8.5) {11.1V};
+\node [font=\small] at (13.25,8.5) {1A};
 \end{circuitikz}
 }%
 
@@ -545,18 +664,12 @@ What are the extra components we need?
 
 
 
-\begin{table}[h]
-\centering
-\begin{tabular}{llll}
-\toprule
-\textbf{Components} & \textbf{Quantity} & \textbf{Rated Voltage} & \textbf{Stall Current} \\
-\midrule
-Brushed DC Motors & 4 & 12 V & 15 A \\
-BLDC Motors & 2 & 11.1 to 22.2 V & 36 A \\
-Servo Motors & 3 & 4 to 8.4 V & 3.8 A \\
-NEMA Stepper Motor (2 Phase) & 1 & 12 V & 0.5 A $\times$ 2 = 1 A \\
-\bottomrule
-\end{tabular}
-\end{table}
+
+
+
+
+
+
+
 
 \end{document}
