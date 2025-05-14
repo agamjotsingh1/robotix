@@ -235,7 +235,7 @@ On top of this, motor drivers for all the motors except the servos (which don't 
 \end{figure}
 \FloatBarrier
 
-\subsection*{Battery Pack}
+\subsubsection*{Battery Pack}
 The battery pack consists not merely the battery but the safety and protection systems in place to avoid, well, catastrophes. In place is a \textbf{BMS} (Battery management system), \textbf{Fuse} to avoid short circuits, \textbf{Fool's diode} to prevent reverse current, and a \textbf{Master Kill Switch} for turning off the whole bot. The battery pack schematic is given below.
 
 \begin{figure}[!ht]
@@ -292,8 +292,120 @@ The battery pack consists not merely the battery but the safety and protection s
 \end{figure}
 \FloatBarrier
 
+The Fool's diode will help in case of reverse currents as all the reverse current will flow through the diode instead of the actual load. We are gonna use a Schottky diode for this purpose due to its high reverse bias breakdown voltage (about 50 to 60 V which is more than enough).
+\newline
+What battery are we gonna choose? Well we haven't calculated the power specifications yet (which will we will do somewhere down the line), but one thing's sure. It's going to be around 12 V nominal voltage battery (or we could stoop down do 11.1 V if we like 3S LiPo Batteries).
 
-\subsection*{Power ig?}
+\subsubsection*{Powering the RPI and ESP32 - Voltage Regulators}
+Since we're using a 12 V battery, it will blow up our Raspberry Pi and ESP32 instantly. We obviously don't want that, so we use voltage regulators which in this case, we will be using a \textbf{Buck Converter} to bring down the voltage to 5V for the RPI, ESP32, LiDAR and Camera Modules. In addition to that, we would also need a 7.4 V power line for the Servo motors to optimally run them for which will be using a different buck converter.
+
+\begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\small]
+\draw  (3.75,11) rectangle (5.25,9.25);
+\draw  (7,13.25) rectangle (8.75,10.25);
+\draw  (10,12) rectangle (11,11.25);
+\draw  (12.5,12) rectangle (13.5,11.25);
+\draw  (13.75,12) rectangle (14.75,11.25);
+\draw  (11.25,12) rectangle (12.25,11.25);
+\draw  (7,9.75) rectangle (8.75,8);
+\draw  (11.5,9.75) rectangle (12.75,9);
+\draw  (10,9.75) rectangle (11.25,9);
+\draw  (10,7.5) rectangle (11,6.75);
+\draw  (11.25,7.5) rectangle (12.25,6.75);
+\draw  (12.5,7.5) rectangle (13.5,6.75);
+\draw (5.25,10.75) to[short] (7,10.75);
+\draw (5.25,10.5) to[short] (6.5,10.5);
+\draw (6.5,10.5) to[short] (6.5,9.25);
+\draw (6.5,9.25) to[short] (7,9.25);
+\draw (5.25,10.25) to[short] (6.25,10.25);
+\draw (6.25,10.25) to[short] (6.25,7);
+\draw (6.25,7) to[short] (10,7);
+\draw (11.75,6.75) to[short] (11.75,6.25);
+\draw (11.75,6.25) to[short] (6,6.25);
+\draw (6,6.25) to[short] (6,10);
+\draw (6,10) to[short] (5.25,10);
+\draw (5.25,9.75) to[short] (5.75,9.75);
+\draw (5.75,9.75) to[short] (5.75,6);
+\draw (5.75,6) to[short] (13,6);
+\draw (13,6.75) to[short] (13,6);
+\node [font=\small] at (10.5,7.25) {Servo};
+\node [font=\small] at (11.75,7.25) {Servo};
+\node [font=\small] at (13,7.25) {Servo};
+\node [font=\small] at (10.6,9.5) {BLDC};
+\node [font=\small] at (12.1,9.5) {BLDC};
+\node [font=\normalsize] at (10.5,11.75) {DC};
+\node [font=\normalsize] at (11.75,11.75) {DC};
+\node [font=\normalsize] at (13,11.75) {DC};
+\node [font=\normalsize] at (14.25,11.75) {DC};
+\draw (8.75,11.5) to[short] (10,11.5);
+\draw (8.75,9.25) to[short] (10,9.25);
+\draw (12,9) to[short] (12,8.5);
+\draw (12,8.5) to[short] (8.75,8.5);
+\draw (8.75,12.5) to[short] (11.75,12.5);
+\draw (11.75,12.5) to[short] (11.75,12);
+\draw (13,11.25) to[short] (13,10.75);
+\draw (13,10.75) to[short] (8.75,10.75);
+\draw (8.75,13) to[short] (14.25,13);
+\draw (14.25,13) to[short] (14.25,12);
+\node [font=\normalsize] at (4.5,10.25) {ESP32};
+\node [font=\normalsize] at (7.75,12.75) {Motor};
+\node [font=\normalsize] at (7.75,12.25) {Driver};
+\node [font=\normalsize] at (7.75,9.25) {Motor};
+\node [font=\normalsize] at (7.75,8.75) {Driver};
+\node [font=\small] at (3.65,13.25) {COMMS};
+\draw [ dashed] (9.75,13.25) rectangle  (15,10.5);
+\node [font=\small] at (10.5,13.5) {Navigation};
+\draw [ dashed] (9.75,10) rectangle  (15,5.75);
+\node [font=\small] at (10.25,5.5) {Arm};
+\draw [<->, >=Stealth] (4.5,15.5) -- (4.5,11);
+\draw  (3.5,17) rectangle (5.75,15.5);
+\node [font=\large] at (4.5,16.25) {RPI};
+\draw (5.75,16.75) to[short] (8,16.75);
+\draw (5.75,15.75) to[short] (8,15.75);
+\draw  (8,17) rectangle (10.5,16.25);
+\draw  (8,16) rectangle (10.5,15.25);
+\node [font=\small] at (9.25,16.6) {LiDAR};
+\node [font=\small] at (9.25,15.6) {Camera};
+\draw (7.75,14.5) to[short] (7.75,13.25);
+\draw (7.75,14.5) to[short] (12.75,14.5);
+\draw (7.75,10.25) to[short] (7.75,9.75);
+\draw (12.75,15.25) to[short] (12.75,14.5);
+\draw  (12,16.75) rectangle (15.25,15.25);
+\node [font=\normalsize] at (13.35,16) {Battery Pack};
+\node [font=\small] at (10.25,14.75) {12 V};
+\draw (12,18.25) to[short] (2.5,18.25);
+\draw (2.5,18.25) to[short] (2.5,10.25);
+\draw (2.5,10.25) to[short] (3.75,10.25);
+\draw (2.5,16.5) to[short] (3.5,16.5);
+\node [font=\small] at (10.25,18.5) {5 V};
+\draw (10.5,8) to[short] (10.5,7.5);
+\draw (10.5,8) to[short] (16.25,8);
+\draw (11.75,8) to[short] (11.75,7.5);
+\draw (13,8) to[short] (13,7.5);
+\draw  (12,18.75) rectangle (15.25,17.5);
+\draw (12.75,17.5) to[short] (12.75,16.75);
+\node [font=\small] at (13.45,18.1) {Buck Converter};
+\draw  (15.75,16.5) rectangle (17.75,14.25);
+\node [font=\small] at (16.75,15.75) {Buck};
+\draw (15.25,15.75) to[short] (15.75,15.75);
+\draw (16.25,14.25) to[short] (16.25,8);
+\node [font=\small] at (16.75,15.25) {Converter};
+\node [font=\small] at (16.85,13.5) {7.4 V};
+\end{circuitikz}
+}%
+
+\label{fig:my_label}
+\caption{Final Schematic}
+\end{figure}
+\FloatBarrier
+
+\newpage
+
+\subsection*{Power Distribution and Component Selection}
+lala
 
 \begin{table}[h]
 \centering
