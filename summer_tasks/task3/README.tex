@@ -420,8 +420,7 @@ What are the extra components we need?
     \item Motor Drivers for 4$\times$ DC Motors and 2$\times$ BLDC Motors
     \item Variable Buck Converters (2$\times$)
     \item Battery
-    \item BMS Chip
-    \item Current Sensor
+    \item BMS Chip (w/ Current Sensor)
     \item Fuse
     \item Schottky Diode
     \item Master switch
@@ -497,7 +496,7 @@ That's a HUGE amount of power. Also you may notice that we have been taking 11.1
 \newline
 This rough power estimation has not taken into account the power consumed by motor drivers, the BMS, etc. has not been considered. Although they will be extremely less compared to the massive 1537 W of power.
 \begin{align*}
-    \textbf{Rough Current Drawn} = 1537.1/11.1 = 138.47\text{ A}
+    \textbf{Rough Stall Current Drawn} = 1537.1/11.1 = 138.47\text{ A}
 \end{align*}
 Now this will affect all the materials we choose henceforth.
 
@@ -512,6 +511,43 @@ This pack has a three cell series combination which results in 11.1 V of voltage
 \end{align*}
 
 So this has an headroom of about 70 A which is MORE than enough. The cost of this battery is about 3653 rupees.
+\newline
+We have to see if this battery can even handle our continous current for atleast 5 minutes.
+
+\begin{table}[!ht]
+\centering
+\resizebox{1.1\textwidth}{!}{%
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Component} & \textbf{Rated Voltage (V)} & \textbf{Rated Current (A)} & \textbf{Continous Power (W)} \\
+\hline
+DC Geared Motor (IG45) & 12.0 & 6.2 & 74.4 \\
+\hline
+BLDC (ECO II Series 2207) & 11.1 & 10.0 & 111.0 \\
+\hline
+NEMA Stepper (39HY38-0504) & 12.0 & 1 & 12.0 \\
+\hline
+Servo Motor (Pro-Range OT5330M) & 7.4 & 3.8 & 28.1 \\
+\hline
+Raspberry Pi 5 & 5.0 & 2.2 & 11.0 \\
+\hline
+Raspberry Pi Camera Module 3 & 5.0 & 0.25 & 1.25 \\
+\hline
+Ldrobot D500 LiDAR Kit & 5.0 & 0.29 & 1.45 \\
+\hline
+ESP32 & 5.0 & 0.3 & 1.5 \\
+\hline
+\end{tabular}
+}%
+\caption{Continous Power and Current Requirements}
+\end{table}
+\FloatBarrier
+
+Total continous current rated current = 60.24 A @ 11.1 V.
+
+Our battery has a capacity of 5200 mAh, so it can last 1 hour/60 minutes with 5.2 A continous current. For 5 minutes of usage, $5.2 \times 60/ 5 = 62.4$ A of continous current can be handled by the battery which is just enough current (about 2.16 A of headroom to spare) to run our bot for 5 minutes.
+\newline\newline
+Note that we have not included the current due to the extra components, because they consume current in the order of $\mu$ A which is almost negligible.
 
 \href{https://robu.in/product/pro-range-5200mah-3s-40c80c-lithium-polymer-battery-pack-lipo/}{Link for the component can be found here.}
 
@@ -541,14 +577,143 @@ Usually BMS barely take in any current, so because of lack of proper datasheets 
 
 \href{https://www.aliexpress.com/item/1005003684963240.html}{Link for the component can be found here.}
 
-\begin{figure}
-    \begin{center}
+\begin{figure}[!ht]
+    \centering
+    \resizebox{0.5\textwidth}{!}{%
         \includegraphics[width=0.75\textwidth]{bms.jpeg}
-    \end{center}
+    }%
     \caption{Data supplied by the vendor}\label{fig:}
 \end{figure}
 \FloatBarrier
 
+Note that this is an unbranded BMS which could very fail mid-operation. Branded BMS are much much more expensive than what we have here, still I am gonna include one of these below.
+
+\subsection*{Alternative Branded BMS}
+DALY SMART BMS M series BMS LFP 3S 200 A for Li-ion batteries. This costs about 7,314 rupees. This includes Wi-Fi support and consumes only microamps of current.
+
+\href{https://bmsdaly.com/collections/smart/products/daly-smart-bms-lfp-4s-7s-8s-16s-20s-24s-li-ion-3s-7s-13s-14s-16s-20s}{Link for the component can be found here.}
+
+\subsubsection*{Motor Drivers}
+\textbf{DC Geared Motor (IG45):}
+Total stall current for all the DC motors = 4*15 = 60 A.
+The motor driver for the IG45 Geared DC motor is the BTS7960 43A H-Bridge Motor Driver (Dual) which contains support for 2 motors in one driver. For 2 motors, stall current = 2*15 = 30 A which is supported by the driver. It costs around 213 rupees and we need 2 of them.
+
+\href{https://www.thingbits.in/products/bts7960-43a-h-bridge-motor-driver?srsltid=AfmBOooXls3mIUkqAdGTjs5LBGZPjaQJos_ASP4EKz1j5q419vNpqofm}{Link for the component can be found here.}
+\newline\newline
+\textbf{BLDC (ECO II Series 2207):}
+Stall current for this BLDC is 36 A. Motor Driver is Hobbywing SKYWALKER-40A-V2 ESC Fixed Wing which costs about 1500 rupees. We need 2 of these.
+
+\href{https://robu.in/product/hobbywing-skywalker-40a-v2-esc-fixed-wing/?gad_source=1&gad_campaignid=17419548928&gbraid=0AAAAADvLFWeX4rkqn3LBCTpLUr-1jl0Tc&gclid=CjwKCAjw_pDBBhBMEiwAmY02NmetT8McrP0gYxQTB2tCx1UlfisPqtj8NFyWjIaiCMbyY6fJ9SDuFRoCG-0QAvD_BwE#tab-specification}{Link for the component can be found here.}
+\newline\newline
+\textbf{Stepper Motor (NEMA16 39HY38-0504):}
+Stall (or Rated which is the same in case of Steppers) current for this Stepper is 0.5*2 = 1 A (there are two phases). Motor Driver is DRV8825 Stepper Motor Driver with Aluminum Heat Sink which costs about 83 rupees.
+
+\href{https://robu.in/product/drv8825-stepper-motor-driver-with-aluminum-heat-sink/}{Link for the component can be found here.}
+
+\subsubsection*{Variable Buck Converters}
+We need two buck converters, one for the 5 V components like the Raspberry Pi and the ESP32, and other (7.4 V) for the servos.
+
+Total maximum current for 5 V components = 2.2 + 0.25 + 0.29 + 0.3 = 3.04 A (15.2 W of power).
+Total stall current for the 7.4 V Servos = 3 * 3.8 = 11.4 A (84.36 W of power).
+
+The Buck converter we are gonna use is the 200W 20A DC-DC Buck Converter Step Down Module. This costs about 377 rupees and can support 200W @ 20A which is more than enough for our bot. Also, we need 2 of these.
+
+\href{https://robu.in/product/200w-20a-dc-dc-buck-converter-step-down-module-constant-current-led-driver-module/?gad_source=1&gad_campaignid=21296336107&gbraid=0AAAAADvLFWdQV_NmhL7_RL-sDvi3f9UYE&gclid=CjwKCAjw_pDBBhBMEiwAmY02NigvhYmL5dfnNkIpkMI6ZSgK__W7klu7-KI32NOlZP0E0lytgsm1FhoCZkYQAvD_BwE#tab-questions}{Link for the component can be found here.}
+
+\subsection*{BOM}
+
+\begin{table}[!ht]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Component} & \textbf{Quantity} & \textbf{Unit Price (INR)} & \textbf{Total Price (INR)} \\
+\hline
+\href{https://robu.in/product/pro-range-5200mah-3s-40c80c-lithium-polymer-battery-pack-lipo/}{Pro-Range 11.1V 5200mAh 40C Battery} & 1 & 3653 & 3653 \\
+\hline
+\href{https://www.digikey.in/en/products/detail/littelfuse-inc/142.5631.6202/2515909}{Littelfuse 200A 58VDC Fuse} & 1 & 377 & 377 \\
+\hline
+\href{https://robu.in/product/ss34-schottky-diode-for-high-speed-switching-pack-of-2/}{SS34 Schottky Diode (Pack of 2)} & 1 & 25 & 25 \\
+\hline
+\href{https://order2india.com/products/12v-200a-car-start-relay-with-accessories?variant=43710190583930}{12V 200A Car Start Relay} & 1 & 1493 & 1493 \\
+\hline
+\href{https://www.aliexpress.com/item/1005003684963240.html}{3S 150A Unbranded BMS} & 1 & 1557 & 1557 \\
+\hline
+\href{https://bmsdaly.com/collections/smart/products/daly-smart-bms-lfp-4s-7s-8s-16s-20s-24s-li-ion-3s-7s-13s-14s-16s-20s}{DALY SMART 3S 200A BMS (Optional)} & 1 & 7314 & 7314 \\
+\hline
+\href{https://www.thingbits.in/products/bts7960-43a-h-bridge-motor-driver}{BTS7960 H-Bridge Motor Driver} & 2 & 213 & 426 \\
+\hline
+\href{https://robu.in/product/hobbywing-skywalker-40a-v2-esc-fixed-wing/}{Hobbywing Skywalker 40A V2 ESC} & 2 & 1500 & 3000 \\
+\hline
+\href{https://robu.in/product/drv8825-stepper-motor-driver-with-aluminum-heat-sink/}{DRV8825 Stepper Motor Driver} & 1 & 83 & 83 \\
+\hline
+\href{https://robu.in/product/200w-20a-dc-dc-buck-converter-step-down-module-constant-current-led-driver-module/}{200W 20A DC-DC Buck Converter} & 2 & 377 & 754 \\
+\hline
+\href{https://robokits.co.in/motors/ig45-12v-50w-dc-geared-motor/ig45-12v-planetary-geared-motor/industrial-grade-ig45-planetary-dc-geared-motor-50w-300rpm-12v-11kgcm}{IG45 Geared Motor (with mount)} & 4 & 2660 & 10640 \\
+\hline
+\href{https://robu.in/product/eco-ii-series-2207-1700kv-brushless-motor/}{ECO II Series 2207 BLDC Motor} & 2 & 1574 & 3148 \\
+\hline
+\href{https://robu.in/product/nema16-39hy38-0504-2-9kg-cm-stepper-motor-round-type-shaft/}{NEMA16 39HY38-0504 Stepper Motor} & 1 & 840 & 840 \\
+\hline
+\href{https://robu.in/product/orange-ot5330m-7-4v-35-5kg-cm-180-metal-gear-digital-servo-motor/}{Pro-Range OT5330M Servo Motor} & 3 & 1889 & 5667 \\
+\hline
+\href{https://robocraze.com/products/raspberry-pi-5-4gb}{Raspberry Pi 5 (4GB)} & 1 & 6149 & 6149 \\
+\hline
+\href{https://robocraze.com/products/raspberry-pi-camera-module-3}{Raspberry Pi Camera Module 3} & 1 & 3499 & 3499 \\
+\hline
+\href{https://robu.in/product/ldrobot-dtof-lidar-stl-19p-360-omni-directional-lidar/}{Ldrobot D500 LiDAR Kit} & 1 & 8159 & 8159 \\
+\hline
+\href{https://robocraze.com/products/nodemcu-32-wifi-bluetooth-esp32-development-board30-pin?variant=42268194046176}{ESP32 Development Board} & 1 & 354 & 354 \\
+\hline
+\end{tabular}
+}
+\caption{Complete Component List with Quantities and Prices}
+\end{table}
+\FloatBarrier
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|l|}
+\hline
+\textbf{Component} & \textbf{Voltage} & \textbf{Current (Max)} & \textbf{Signal Type} & \textbf{Recommended Connector} \\
+\hline
+Raspberry Pi 5 & 5V & 2.2A & USB/CSI & Barrel Jack / JST XH 2-pin \\
+ESP32 & 5V & 0.3A & UART / GPIO & JST PH / Dupont 2-3 pin \\
+LiDAR (LDROBOT D500) & 5V & 290 mA & UART / USB & JST GH / USB \\
+Camera Module 3 & 5V & 250 mA & CSI & CSI Ribbon Cable \\
+IG45 DC Motors (x4) & 11.1V & 3.75A each & PWM (via driver) & XT30 / Screw Terminal \\
+BLDC Motor (x2) & 11.1V & 18A each & ESC Signal & XT60 / MT60 \\
+NEMA16 Stepper Motor & 11.1V & 1A & Step/Dir & JST XH 4-pin \\
+Servo (x3 OT5330M) & 7.4V & 1.3A each & PWM & JR/Futaba 3-pin \\
+Motor Drivers & 11.1V & -- & Logic + Power & Screw Terminal + JST XH \\
+Buck Converter (x2) & 11.1V in & Varies & Power Only & XT60 in / JST XH out \\
+Battery Pack & 11.1V & 40A+ & Power Only & XT60 / XT90 \\
+\hline
+\end{tabular}
+\caption{Component Power and Connector Requirements}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|p{6.5cm}|}
+\hline
+\textbf{Connector Type} & \textbf{Quantity} & \textbf{Used For} \\
+\hline
+XT60 & 3 & Battery Pack to Buck Converter, BLDC Motors \\
+XT30 & 4 & IG45 DC Motors, Servos \\
+JST XH 2-pin & 3 & 5V Power to RPi, ESP32, LiDAR \\
+JST XH 4-pin & 2 & Stepper Motor and Motor Driver signals \\
+JR/Futaba 3-pin Servo & 3 & Servo motors (OT5330M) \\
+CSI Ribbon & 1 & Camera Module to RPi \\
+USB Micro / JST GH & 1 & LiDAR to RPi (depends on interface) \\
+Dupont 2-3 pin & 4 & UART/GPIO between RPi and ESP32 \\
+Screw Terminals & 2 & Motor Driver Power Inputs \\
+Molex KK / JST PH & 2 & Motor Driver PWM signals \\
+\hline
+\end{tabular}
+\caption{Connectors Required and Their Quantities}
+\end{table}
 
 \begin{figure}[!ht]
 \centering
