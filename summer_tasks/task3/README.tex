@@ -620,7 +620,7 @@ The Buck converter we are gonna use is the 200W 20A DC-DC Buck Converter Step Do
 
 \href{https://robu.in/product/200w-20a-dc-dc-buck-converter-step-down-module-constant-current-led-driver-module/?gad_source=1&gad_campaignid=21296336107&gbraid=0AAAAADvLFWdQV_NmhL7_RL-sDvi3f9UYE&gclid=CjwKCAjw_pDBBhBMEiwAmY02NigvhYmL5dfnNkIpkMI6ZSgK__W7klu7-KI32NOlZP0E0lytgsm1FhoCZkYQAvD_BwE#tab-questions}{Link for the component can be found here.}
 
-\subsection*{BOM}
+\subsection*{BOM with Connectors}
 
 \begin{table}[!ht]
 \centering
@@ -665,56 +665,31 @@ The Buck converter we are gonna use is the 200W 20A DC-DC Buck Converter Step Do
 \hline
 \href{https://robocraze.com/products/nodemcu-32-wifi-bluetooth-esp32-development-board30-pin?variant=42268194046176}{ESP32 Development Board} & 1 & 354 & 354 \\
 \hline
+\href{https://robocraze.com/product/amass-xt30upb30-female-connector-xt30upb-f30-g-y}{XT30 Connector (IG45 to BTS7960)} & 4 & 32 & 128 \\
+\hline
+\href{https://www.flyrobo.in/4p-1.25mm-single-head-dupont-terminal-wire}{Dupont 4-pin (Stepper to Driver)} & 1 & 12 & 12 \\
+\hline
+\href{https://robu.in/product/20cm-dupont-wire-color-jumper-cable-2-54mm-1p-1p-female-female-40pcs/}{Jumper Wires F-F (Driver to ESP32)} & 1 & 40 & 40 \\
+\hline
+\href{https://robu.in/product/20cm-dupont-wire-color-jumper-cable-2-54mm-1p-1p-female-female-40pcs/}{Jumper Wires F-F (RPI to ESP32 UART)} & 1 & 40 & 40 \\
+\hline
+\href{https://zbotic.in/product/xt60-male-female-connector-pair-for-lipo-battery/}{XT60 Connectors (Battery to Driver/Buck)} & 3 & 28 & 84 \\
+\hline
+\href{https://www.coolerguys.com/en-in/products/usb-female-a-to-bare-wire-30}{Buck to USB A Female} & 2 & 100 & 200 \\
+\hline
+\href{https://www.amazon.in/AmazonBasics-Braided-Charging-Cable-Smartphone/dp/B0BPCL2DXZ?th=1}{USB A to USB C (RPI Power)} & 1 & 189 & 189 \\
+\hline
+\href{https://www.amazon.in/amazon-basics-Braided-Charging-Transfer/dp/B0CH1499X7}{USB A to MicroUSB (ESP32 Power)} & 1 & 99 & 99 \\
+\hline
+\href{https://robu.in/product/high-quality-ultra-flexible-8awg-silicone-wire-black/}{130m 8 AWG Wire (Battery to Buck, Servo etc.)} & 1 & 394 & 394 \\
+\hline
 \end{tabular}
 }
 \caption{Complete Component List with Quantities and Prices}
 \end{table}
 \FloatBarrier
 
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|c|c|c|l|}
-\hline
-\textbf{Component} & \textbf{Voltage} & \textbf{Current (Max)} & \textbf{Signal Type} & \textbf{Recommended Connector} \\
-\hline
-Raspberry Pi 5 & 5V & 2.2A & USB/CSI & Barrel Jack / JST XH 2-pin \\
-ESP32 & 5V & 0.3A & UART / GPIO & JST PH / Dupont 2-3 pin \\
-LiDAR (LDROBOT D500) & 5V & 290 mA & UART / USB & JST GH / USB \\
-Camera Module 3 & 5V & 250 mA & CSI & CSI Ribbon Cable \\
-IG45 DC Motors (x4) & 11.1V & 3.75A each & PWM (via driver) & XT30 / Screw Terminal \\
-BLDC Motor (x2) & 11.1V & 18A each & ESC Signal & XT60 / MT60 \\
-NEMA16 Stepper Motor & 11.1V & 1A & Step/Dir & JST XH 4-pin \\
-Servo (x3 OT5330M) & 7.4V & 1.3A each & PWM & JR/Futaba 3-pin \\
-Motor Drivers & 11.1V & -- & Logic + Power & Screw Terminal + JST XH \\
-Buck Converter (x2) & 11.1V in & Varies & Power Only & XT60 in / JST XH out \\
-Battery Pack & 11.1V & 40A+ & Power Only & XT60 / XT90 \\
-\hline
-\end{tabular}
-\caption{Component Power and Connector Requirements}
-\end{table}
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|c|p{6.5cm}|}
-\hline
-\textbf{Connector Type} & \textbf{Quantity} & \textbf{Used For} \\
-\hline
-XT60 & 3 & Battery Pack to Buck Converter, BLDC Motors \\
-XT30 & 4 & IG45 DC Motors, Servos \\
-JST XH 2-pin & 3 & 5V Power to RPi, ESP32, LiDAR \\
-JST XH 4-pin & 2 & Stepper Motor and Motor Driver signals \\
-JR/Futaba 3-pin Servo & 3 & Servo motors (OT5330M) \\
-CSI Ribbon & 1 & Camera Module to RPi \\
-USB Micro / JST GH & 1 & LiDAR to RPi (depends on interface) \\
-Dupont 2-3 pin & 4 & UART/GPIO between RPi and ESP32 \\
-Screw Terminals & 2 & Motor Driver Power Inputs \\
-Molex KK / JST PH & 2 & Motor Driver PWM signals \\
-\hline
-\end{tabular}
-\caption{Connectors Required and Their Quantities}
-\end{table}
-
+The connectors were selected based on the current ratings of the components. Wherever an bare connector is there it is to be used with the 8 AWG wire (upto 40 A).
 \begin{figure}[!ht]
 \centering
 \resizebox{1\textwidth}{!}{%
