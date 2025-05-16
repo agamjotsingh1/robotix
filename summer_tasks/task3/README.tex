@@ -146,6 +146,35 @@ This is lesser than the torque required in case of the shoulder and elbow joint 
 
 \textbf{End effector actuators:} These actuators dont need $\textit{that}$ much torque as the other joints but have to be more versatile. We may need to use it as a gripper or say as a drill-ish machine which require precision/speed at once. Considering this and also the fact that the only motors which are left are the BLDC motors, we're just gonna use the ECO II Series 2207 BLDC Motors.
 
+\begin{figure}[!ht]
+\centering
+\resizebox{1\textwidth}{!}{%
+\begin{circuitikz}
+\tikzstyle{every node}=[font=\small]
+\draw  (4.25,8.25) rectangle (6.75,6);
+\draw  (5.5,8.75) circle (0.5cm);
+\draw (5.75,9.25) to[short] (7,10.5);
+\draw  (7.5,10.75) circle (0.5cm);
+\draw (8,11) to[short] (10,11);
+\draw  (10.5,11) circle (0.5cm);
+\draw (11,10.75) to[short] (12.25,9.5);
+\draw  (11.5,9.5) rectangle (14.25,8.25);
+\node [font=\small] at (12.75,8.75) {End Effector};
+\node [font=\small] at (5.5,7.25) {Base};
+\node [font=\small] at (5.5,8.75) {A1};
+\node [font=\small] at (7.5,10.75) {A2};
+\node [font=\small] at (10.5,11) {A3};
+\node [font=\small] at (6,10.25) {L1, M1};
+\node [font=\small] at (9,11.25) {L2, M2};
+\node [font=\small] at (12,10.5) {L3, M3};
+\end{circuitikz}
+}%
+
+\label{fig:my_label}
+    \caption{6 DOF Robotic Arm Design Overview}
+\end{figure}
+\FloatBarrier
+
 \subsubsection*{Motor Controllers and Drivers}
 First off, our motor controller choice is pretty obvious. It's the ESP32 microcontroller. Because of its computation restrictions we can't really use it as the main driver with the object detection with lidars and camera on it, but motor driving signals are easy to compute.
 \newline
@@ -620,7 +649,7 @@ The Buck converter we are gonna use is the 200W 20A DC-DC Buck Converter Step Do
 
 \href{https://robu.in/product/200w-20a-dc-dc-buck-converter-step-down-module-constant-current-led-driver-module/?gad_source=1&gad_campaignid=21296336107&gbraid=0AAAAADvLFWdQV_NmhL7_RL-sDvi3f9UYE&gclid=CjwKCAjw_pDBBhBMEiwAmY02NigvhYmL5dfnNkIpkMI6ZSgK__W7klu7-KI32NOlZP0E0lytgsm1FhoCZkYQAvD_BwE#tab-questions}{Link for the component can be found here.}
 
-\subsection*{BOM with Connectors}
+\subsection*{Bill of Materials(BOM) with Connectors}
 
 \begin{table}[!ht]
 \centering
@@ -683,6 +712,10 @@ The Buck converter we are gonna use is the 200W 20A DC-DC Buck Converter Step Do
 \hline
 \href{https://robu.in/product/high-quality-ultra-flexible-8awg-silicone-wire-black/}{130m 8 AWG Wire (Battery to Buck, Servo etc.)} & 1 & 394 & 394 \\
 \hline
+\textbf{Total (With Unbranded BMS)} & & & 51,010\\
+\hline
+\textbf{Total (With DALY BMS)} & & & 56,767\\
+\hline
 \end{tabular}
 }
 \caption{Complete Component List with Quantities and Prices}
@@ -725,8 +758,8 @@ The connectors were selected based on the current ratings of the components. Whe
 \node [font=\small] at (10.5,7.25) {Servo};
 \node [font=\small] at (11.75,7.25) {Servo};
 \node [font=\small] at (13,7.25) {Servo};
-\node [font=\small] at (10.5,9.5) {BLDC};
-\node [font=\small] at (12,9.5) {BLDC};
+\node [font=\small] at (10.6,9.5) {BLDC};
+\node [font=\small] at (12.1,9.5) {BLDC};
 \node [font=\normalsize] at (10.5,11.75) {DC};
 \node [font=\normalsize] at (11.75,11.75) {DC};
 \node [font=\normalsize] at (13,11.75) {DC};
@@ -746,7 +779,7 @@ The connectors were selected based on the current ratings of the components. Whe
 \node [font=\normalsize] at (7.75,12.25) {Driver};
 \node [font=\normalsize] at (7.75,9.25) {Motor};
 \node [font=\normalsize] at (7.75,8.75) {Driver};
-\node [font=\small] at (3.75,13.25) {COMMS};
+\node [font=\small] at (3.65,13.25) {COMMS};
 \draw [ dashed] (9.75,13.25) rectangle  (15,10.5);
 \node [font=\small] at (10.5,13.5) {Navigation};
 \draw [ dashed] (9.75,10) rectangle  (15,5.75);
@@ -758,14 +791,14 @@ The connectors were selected based on the current ratings of the components. Whe
 \draw (5.75,15.75) to[short] (8,15.75);
 \draw  (8,17) rectangle (10.5,16.25);
 \draw  (8,16) rectangle (10.5,15.25);
-\node [font=\small] at (9.25,16.5) {LiDAR};
-\node [font=\small] at (9.25,15.5) {Camera Module};
+\node [font=\small] at (9.25,16.6) {LiDAR};
+\node [font=\small] at (9.25,15.6) {Camera};
 \draw (7.75,14.5) to[short] (7.75,13.25);
 \draw (7.75,14.5) to[short] (12.75,14.5);
 \draw (7.75,10.25) to[short] (7.75,9.75);
 \draw (12.75,15.25) to[short] (12.75,14.5);
 \draw  (12,16.75) rectangle (15.25,15.25);
-\node [font=\normalsize] at (13.25,16) {Battery Pack};
+\node [font=\normalsize] at (13.45,16) {Battery Pack};
 \node [font=\small] at (10.25,14.75) {11.1 V};
 \draw (12,18.25) to[short] (2.5,18.25);
 \draw (2.5,18.25) to[short] (2.5,10.25);
@@ -778,7 +811,7 @@ The connectors were selected based on the current ratings of the components. Whe
 \draw (13,8) to[short] (13,7.5);
 \draw  (12,18.75) rectangle (15.25,17.5);
 \draw (12.75,17.5) to[short] (12.75,16.75);
-\node [font=\small] at (13.25,18) {Buck Converter};
+\node [font=\small] at (13.55,18.2) {Buck Converter};
 \draw  (15.75,16.5) rectangle (17.75,14.25);
 \node [font=\small] at (16.75,15.75) {Buck};
 \draw (15.25,15.75) to[short] (15.75,15.75);
@@ -809,17 +842,7 @@ The connectors were selected based on the current ratings of the components. Whe
 }%
 
 \label{fig:my_label}
+\caption{Final Schematic with Stall current}
 \end{figure}
-
-
-
-
-
-
-
-
-
-
-
 
 \end{document}

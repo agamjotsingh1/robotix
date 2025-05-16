@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.17)  16 MAY 2025 15:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.17)  16 MAY 2025 15:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -900,6 +900,9 @@ LaTeX Warning: Label `fig:my_label' multiply defined.
 
 LaTeX Warning: Label `fig:my_label' multiply defined.
 
+
+LaTeX Warning: Label `fig:my_label' multiply defined.
+
 )
 \openout1 = `README.aux'.
 
@@ -1015,62 +1018,64 @@ xlive/2025/texmf-dist/fonts/enc/dvips/mnsymbol/MnSymbolC.enc}{/opt/texlive/2025
 [6]
 
 [7]
-Overfull \hbox (47.5854pt too wide) in paragraph at lines 433--454
- [][] 
- []
-
-
-Overfull \hbox (64.75204pt too wide) in paragraph at lines 459--480
- [][] 
- []
-
-
 
 [8]
-Overfull \hbox (43.00917pt too wide) in paragraph at lines 519--542
+Overfull \hbox (47.5854pt too wide) in paragraph at lines 462--483
+ [][] 
+ []
+
+
+Overfull \hbox (64.75204pt too wide) in paragraph at lines 488--509
  [][] 
  []
 
 
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 548--551
-
+Overfull \hbox (43.00917pt too wide) in paragraph at lines 548--571
+ [][] 
  []
 
 
 
 [10]
-<bms.jpeg, id=92, 1091.07625pt x 1284.8pt>
+Underfull \hbox (badness 10000) in paragraph at lines 577--580
+
+ []
+
+
+
+[11]
+<bms.jpeg, id=97, 1091.07625pt x 1284.8pt>
 File: bms.jpeg Graphic file (type jpg)
 <use bms.jpeg>
-Package pdftex.def Info: bms.jpeg  used on input line 584.
+Package pdftex.def Info: bms.jpeg  used on input line 613.
 (pdftex.def)             Requested size: 322.50346pt x 379.75769pt.
 
-Overfull \hbox (0.50583pt too wide) in paragraph at lines 589--590
+Overfull \hbox (0.50583pt too wide) in paragraph at lines 618--619
 []\OT1/cmr/m/n/12 Note that this is an un-branded BMS which could very fail mid
 -operation. Branded
  []
 
 
 
-[11 <./bms.jpeg>]
-Underfull \hbox (badness 10000) in paragraph at lines 601--605
+[12 <./bms.jpeg>]
+Underfull \hbox (badness 10000) in paragraph at lines 630--634
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 606--610
+Underfull \hbox (badness 10000) in paragraph at lines 635--639
 
  []
 
 
-
-[12]
 
 [13]
 
-[14] (./README.aux)
+[14]
+
+[15] (./README.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -1083,10 +1088,10 @@ Package rerunfilecheck Info: File `README.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 47828 strings out of 473190
- 1105408 string characters out of 5692361
- 1739475 words of memory out of 5000000
- 70540 multiletter control sequences out of 15000+600000
+ 47875 strings out of 473190
+ 1106745 string characters out of 5692361
+ 1742506 words of memory out of 5000000
+ 70584 multiletter control sequences out of 15000+600000
  571425 words of font info for 78 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,11n,93p,543b,949s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1099,10 +1104,10 @@ s/type1/public/amsfonts/cm/cmr12.pfb></opt/texlive/2025/texmf-dist/fonts/type1/
 public/amsfonts/cm/cmr8.pfb></opt/texlive/2025/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmti12.pfb></opt/texlive/2025/texmf-dist/fonts/type1/public/cm-super/
 sfrm1200.pfb>
-Output written on README.pdf (14 pages, 307887 bytes).
+Output written on README.pdf (15 pages, 310194 bytes).
 PDF statistics:
- 210 PDF objects out of 1000 (max. 8388607)
- 171 compressed objects within 2 object streams
- 49 named destinations out of 1000 (max. 500000)
+ 216 PDF objects out of 1000 (max. 8388607)
+ 176 compressed objects within 2 object streams
+ 52 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
 
